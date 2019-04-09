@@ -8,7 +8,7 @@ struct Card
 
     # Construtors
     Card(suit, number) = number in 1:13 ? new(suit, number, false) : error("out of number")
-    Card()             = new(nothing, nothing, true) # for jorker
+    Card()             = new(nothing, nothing, true) # for jorker (unused)
 end
 
 struct Deck
@@ -24,8 +24,10 @@ end
 
 struct Player
     hands::Array{Card}
+    Player(deck::Deck) = new(map(_ -> pop!(deck.cards), 1:2)) # 初期手札2枚をdeal
 end
 
+# point 計算 (A は 11 か 1, Jack, Queen, King は 10, それ以外はそのまま)
 function point(player::Player)
     p, aces = 0, 0
     for card in player.hands
@@ -39,6 +41,7 @@ function point(player::Player)
         end
     end
 
+    # A は bust しないように後で計算
     while aces > 0
         p + 11 > 21 ? p += 1 : p += 11
         aces -= 1
@@ -47,50 +50,61 @@ function point(player::Player)
     p
 end
 
-isbust(point::Integer)           = point > 21
-show_hands(player::Player)       = println(player.hands, " : point = ", point(player), isbust(point(player)) ? "(busted)" : "")
-deal(player::Player, deck::Deck) = push!(player.hands, pop!(deck.cards))
+# bust 判定
+isbusted(point::Integer) = point > 21
+isbusted(player::Player) = isbusted(point(player))
 
-function dealer_do(dealer::Player, deck::Deck)
+show_hands(player::Player, label) = println("\n", "[$label]", player.hands, " : point = ", point(player), isbusted(player) ? "(busted)" : "", "\n")
+show_players_hands(player::Player) = show_hands(player, "Player")
+show_dealers_hands(dealer::Player) = show_hands(dealer, "Dealer")
+show_dealers_one(dealer::Player) = println("[dealer]", dealer.hands[1], "\n")
+
+deal(player::Player, deck::Deck)  = push!(player.hands, pop!(deck.cards))
+
+function dealer_tern(dealer::Player, deck::Deck)
     while point(dealer) < 17
         deal(dealer, deck)
     end
 end
 
+# 勝敗判定
 function check(player::Player, dealer::Player)
-    isbust(point(player)) && return println("you lose")
-    isbust(point(dealer)) && return println("you win")
+    isbusted(player) && isbusted(dealer) && println("even")
+    isbusted(player) && return println("you lose")
+    isbusted(dealer) && return println("you win")
 
     if point(player) > point(dealer)
-        println("you win")
+        println("result: you win!")
     elseif point(player) == point(dealer)
-        println("no contest")
+        println("result: even")
     else
-        println("you lose")
+        println("result: you lose")
     end
 end
 
+# Player 入力受付
 function player_input()
-    print("Stand[s], Hit[h] :")
-    k = readline()
-    k in ("s", "h") ? k : player_input()
-    k
+    print("Hit[h] or Stand[s] :")
+    key = readline()
+    key in ("s", "h") ? key : player_input()
 end
 
 function start()
     deck = Deck()
-    player, dealer = Player(map(i -> pop!(deck.cards), 1:2)), Player(map(i -> pop!(deck.cards), 1:2))
-    show_hands(player)
+    player, dealer = Player(deck), Player(deck)
+    show_players_hands(player)
+    show_dealers_one(dealer)
     while player_input() == "h"
         deal(player, deck)
-        print("[player]")
-        show_hands(player)
+        show_players_hands(player)
+        isbusted(player)  && break
     end
 
-    dealer_do(dealer, deck)
+    if !isbusted(player)
+        dealer_tern(dealer, deck)
+    end
 
-    println("[dealer]")
-    show_hands(dealer)
+    show_dealers_hands(dealer)
 
     check(player, dealer)
 end
