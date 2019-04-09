@@ -59,6 +59,8 @@ end
 
 function check(player::Player, dealer::Player)
     isbust(point(player)) && return println("you lose")
+    isbust(point(dealer)) && return println("you win")
+
     if point(player) > point(dealer)
         println("you win")
     elseif point(player) == point(dealer)
