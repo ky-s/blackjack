@@ -1,0 +1,3 @@
+include("./blackjack.jl")
+
+start()

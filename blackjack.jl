@@ -25,6 +25,7 @@ end
 struct Player
     hands::Array{Card}
     Player(deck::Deck) = new(map(_ -> pop!(deck.cards), 1:2)) # 初期手札2枚をdeal
+    Player() = new([])
 end
 
 # point 計算 (A は 11 か 1, Jack, Queen, King は 10, それ以外はそのまま)
@@ -43,7 +44,7 @@ function point(player::Player)
 
     # A は bust しないように後で計算
     while aces > 0
-        p + 11 > 21 ? p += 1 : p += 11
+        p += (p + 11 > 21 ? 1 : 11)
         aces -= 1
     end
 
@@ -57,7 +58,7 @@ isbusted(player::Player) = isbusted(point(player))
 show_hands(player::Player, label) = println("\n", "[$label]", player.hands, " : point = ", point(player), isbusted(player) ? "(busted)" : "", "\n")
 show_players_hands(player::Player) = show_hands(player, "Player")
 show_dealers_hands(dealer::Player) = show_hands(dealer, "Dealer")
-show_dealers_one(dealer::Player) = println("[dealer]", dealer.hands[1], "\n")
+show_dealers_reveal(dealer::Player) = println("[dealer]", dealer.hands[1], "\n")
 
 deal(player::Player, deck::Deck)  = push!(player.hands, pop!(deck.cards))
 
@@ -93,7 +94,7 @@ function start()
     deck = Deck()
     player, dealer = Player(deck), Player(deck)
     show_players_hands(player)
-    show_dealers_one(dealer)
+    show_dealers_reveal(dealer)
     while player_input() == "h"
         deal(player, deck)
         show_players_hands(player)
@@ -108,5 +109,3 @@ function start()
 
     check(player, dealer)
 end
-
-start()
