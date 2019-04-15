@@ -34,7 +34,6 @@ function point(player::Player)
     for card in player.hands
         if card.number == 1
             aces += 1
-            continue
         elseif card.number >= 10
             p += 10
         else
