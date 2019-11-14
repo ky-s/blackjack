@@ -24,6 +24,8 @@ end
 
 struct Player
     hands::Array{Card}
+
+    # Construtors
     Player(deck::Deck) = new(map(_ -> pop!(deck.cards), 1:2)) # 初期手札2枚をdeal
     Player() = new([])
 end
@@ -55,12 +57,12 @@ end
 isbusted(point::Integer) = point > 21
 isbusted(player::Player) = isbusted(point(player))
 
-show_hands(player::Player, label) = println("\n", "[$label]", player.hands, " : point = ", point(player), isbusted(player) ? "(busted)" : "", "\n")
-show_players_hands(player::Player) = show_hands(player, "Player")
-show_dealers_hands(dealer::Player) = show_hands(dealer, "Dealer")
+show_hands(player::Player, label)   = println("\n", "[$label]", player.hands, " : point = ", point(player), isbusted(player) ? "(busted)" : "", "\n")
+show_players_hands(player::Player)  = show_hands(player, "Player")
+show_dealers_hands(dealer::Player)  = show_hands(dealer, "Dealer")
 show_dealers_reveal(dealer::Player) = println("[dealer]", dealer.hands[1], "\n")
 
-deal(player::Player, deck::Deck)  = push!(player.hands, pop!(deck.cards))
+deal(player::Player, deck::Deck) = push!(player.hands, pop!(deck.cards))
 
 function dealer_tern(dealer::Player, deck::Deck)
     while point(dealer) < 17
@@ -93,12 +95,14 @@ end
 function start()
     deck = Deck()
     player, dealer = Player(deck), Player(deck)
+
     show_players_hands(player)
     show_dealers_reveal(dealer)
+
     while player_input() == "h"
         deal(player, deck)
         show_players_hands(player)
-        isbusted(player)  && break
+        isbusted(player) && break
     end
 
     if !isbusted(player)
