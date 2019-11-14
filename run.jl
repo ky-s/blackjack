@@ -1,3 +1,3 @@
-include("./blackjack.jl")
+include("./lib/blackjack.jl")
 
 start()

@@ -1,4 +1,4 @@
-include("./blackjack.jl")
+include("./lib/blackjack.jl")
 
 using Test
 
