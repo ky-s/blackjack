@@ -1,28 +1,7 @@
-# bust 判定
-isbusted(point::Integer) = point > 21
-isbusted(player::Player) = isbusted(point(player))
-
-function dealer_tern(dealer::Player, deck::Deck)
-    while point(dealer) < 17
-        deal(dealer, deck)
-    end
-end
-
-# 勝敗判定
-function check(player::Player, dealer::Player)
-    isbusted(player) && isbusted(dealer) && return even()
-    isbusted(player) && return youlose()
-    isbusted(dealer) && return youwin()
-
-    point(player) > point(dealer)  && return youwin()
-    point(player) == point(dealer) && return even()
-
-    youlose()
-end
-
 # point 計算 (A は 11 か 1, Jack, Queen, King は 10, それ以外はそのまま)
 function point(player::Player)
     p, aces = 0, 0
+
     for card in player.hands
         if card.number == 1
             aces += 1
@@ -42,4 +21,22 @@ function point(player::Player)
     p
 end
 
+# bust 判定
+isbusted(point::Integer) = point > 21
+isbusted(player::Player) = isbusted(point(player))
 
+# 勝敗判定
+function check(player::Player, dealer::Player)
+    isbusted(player) && isbusted(dealer) && return even()
+    isbusted(player) && return youlose()
+    isbusted(dealer) && return youwin()
+
+    c = cmp(point.([player, dealer])...)
+    if c == 1
+        youwin()
+    elseif c== 0
+        even()
+    else
+        youlose()
+    end
+end
