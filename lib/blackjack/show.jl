@@ -1,3 +1,37 @@
+function show_game_start()
+    println("===========================================")
+    println()
+    println("    Blackjack game : julia")
+    println()
+    println("===========================================")
+end
+
+function show_result(result::AbstractString)
+    println("===========================================")
+    println()
+    println("    Result: $(player_label()) $(result)")
+    println()
+    println("===========================================")
+end
+
+function show_turn(label)
+    println("-------------------------------------------")
+    println("    $label turn")
+    println("-------------------------------------------")
+end
+
+# card
+function Base.show(io::IO, c::Card)
+    c.isjorker && return print(io, "JORKER")
+    n = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"][c.number]
+    print(io, "[", n, " of ", c.suit, "]")
+end
+
+Base.show(io::IO, ca::Array{Card}) = print(io, join(ca, ", "))
+
+player_label() = "You"
+dealer_label() = "Dealer"
+
 function show_hands(player::Player, label)
     println("[ *** $label *** ]", "\n",
             player.hands, "\n",
@@ -5,11 +39,9 @@ function show_hands(player::Player, label)
             isbusted(player) ? "(busted)" : "", "\n")
 end
 
-show_players_hands(player::Player)  = show_hands(player, "You")
-show_dealers_hands(dealer::Player)  = show_hands(dealer, "Dealer")
+show_players_hands(player::Player)  = show_hands(player, player_label())
+show_dealers_hands(dealer::Player)  = show_hands(dealer, dealer_label())
 show_dealers_reveal(dealer::Player) = println("[ ### dealer ### ]", "\n", dealer.hands[1], "\n")
 
-youwin()  = println("    Result: You Win!!")
-youlose() = println("    Result: You Lose!")
-even()    = println("    Result: Even")
+clear() = run(`clear`)
 

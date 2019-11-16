@@ -25,6 +25,10 @@ end
 isbusted(point::Integer) = point > 21
 isbusted(player::Player) = isbusted(point(player))
 
+youwin()  = "Win!!"
+youlose() = "Lose!"
+even()    = "Even"
+
 # 勝敗判定
 function check(player::Player, dealer::Player)
     isbusted(player) && isbusted(dealer) && return even()
