@@ -1,5 +1,8 @@
 include("./lib/blackjack.jl")
 
+using .Blackjack: Player, Card,
+                  SPADES, CLUBS, HEARTS, DIAMONDS,
+                  point, isbusted
 using Test
 
 @testset "point calculation" begin

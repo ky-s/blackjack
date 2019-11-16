@@ -1,3 +1,3 @@
 include("./lib/blackjack.jl")
 
-start()
+Blackjack.start()
