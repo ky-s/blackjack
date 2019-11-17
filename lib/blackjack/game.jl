@@ -37,8 +37,8 @@ function start()
 
     deck = Deck()
     # 初期手札2枚をdeal
-    player = Player(repeat(_ -> deal(deck), 2))
-    dealer = Player(repeat(_ -> deal(deck), 2))
+    player = Player(@repeat(deal(deck), 2))
+    dealer = Player(@repeat(deal(deck), 2))
 
     show_dealers_reveal(dealer)
     sleep(1)

@@ -1,1 +1,3 @@
-repeat(f::Function, n::Integer) = map(i -> f(i), 1:n)
+macro repeat(f, n)
+    :(map(_ -> $(esc(f)), 1:$(esc(n))))
+end
