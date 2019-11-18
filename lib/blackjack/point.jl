@@ -11,7 +11,7 @@ countaces(player::Player) = count(card -> card.number == 1, player.hands)
 
 # bust 判定
 isbusted(point::Integer) = point > 21
-isbusted(player::Player) = isbusted(point(player))
+isbusted(player::Player) = point(player) |> isbusted
 
 # 勝敗判定
 # player, dealer 共に busted はありえない。

@@ -23,7 +23,7 @@ end
 # card
 function Base.show(io::IO, c::Card)
     c.isjorker && return print(io, "JORKER")
-    n = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"][c.number]
+    n = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"][c.number]
     print(io, "[", n, " of ", c.suit, "]")
 end
 

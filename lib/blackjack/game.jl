@@ -23,7 +23,7 @@ function dealer_tern(dealer::Player, player::Player, deck::Deck)
     dealer_label() |> show_turn
     show_dealers_hands(dealer)
     sleep(1)
-    while point(dealer) < 17 && point(dealer) < point(player)
+    while point(dealer) < 17 || point(dealer) < point(player)
         deal(dealer, deck)
         show_dealers_hands(dealer)
         sleep(1)
