@@ -2,7 +2,7 @@ include("./lib/blackjack.jl")
 
 using .Blackjack: Player, Card,
                   SPADES, CLUBS, HEARTS, DIAMONDS,
-                  point, isbusted
+                  point, isbusted, countup
 using Test
 
 @testset "point calculation" begin
@@ -49,8 +49,19 @@ end
     push!(player.hands, Card(SPADES,  11))
     @test !isbusted(player)
     push!(player.hands, Card(HEARTS,   1))
+    @test !isbusted(player)
+    push!(player.hands, Card(CLUBS,    9))
+    @test !isbusted(player)
+    push!(player.hands, Card(CLUBS,    1))
     @test isbusted(player)
 
     @test !isbusted(21)
     @test isbusted(22)
+end
+
+@testset "countup" begin
+    @test countup(1, 21, [10, 10, 10])  == 21
+    @test countup(3, 21, [10, 10, 10])  == 13
+    @test countup(19, 21, [])           == 19
+    @test countup(21, 21, [10, 10, 10]) == 21
 end

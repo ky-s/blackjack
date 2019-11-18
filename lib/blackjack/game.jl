@@ -49,7 +49,7 @@ function start()
 
     !isbusted(player) && dealer_tern(dealer, player, deck)
 
-    check(player, dealer) |> show_result
+    check(player, dealer) |> result_view |> show_result
 
     show_dealers_hands(dealer)
     show_players_hands(player)

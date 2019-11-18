@@ -9,7 +9,7 @@ end
 function show_result(result::AbstractString)
     println("===========================================")
     println()
-    println("    Result: $(player_label()) $(result)")
+    println("    Result: $(result)")
     println()
     println("===========================================")
 end
@@ -42,6 +42,12 @@ end
 show_players_hands(player::Player)  = show_hands(player, player_label())
 show_dealers_hands(dealer::Player)  = show_hands(dealer, dealer_label())
 show_dealers_reveal(dealer::Player) = println("[ ### dealer ### ]", "\n", dealer.hands[1], "\n")
+
+function result_view(c)
+    c == 1 && return "You Win!!"
+    c == 0 && return "Even"
+    "You Lose!"
+end
 
 clear() = run(`clear`)
 
