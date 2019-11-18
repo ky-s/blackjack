@@ -1,10 +1,6 @@
 point(card::Card) = card.number < 10 ? card.number : 10
 function point(player::Player)
-    countup(
-        sum(point, player.hands),
-        21,
-        fill(10, countaces(player))
-    )
+    sumlimit([sum(point, player.hands); fill(10, countaces(player))], limit=21)
 end
 
 countaces(player::Player) = count(card -> card.number == 1, player.hands)

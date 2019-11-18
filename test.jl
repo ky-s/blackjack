@@ -2,7 +2,7 @@ include("./lib/blackjack.jl")
 
 using .Blackjack: Player, Card,
                   SPADES, CLUBS, HEARTS, DIAMONDS,
-                  point, isbusted, countup
+                  point, isbusted, sumlimit
 using Test
 
 @testset "point calculation" begin
@@ -59,9 +59,10 @@ end
     @test isbusted(22)
 end
 
-@testset "countup" begin
-    @test countup(1, 21, [10, 10, 10])  == 21
-    @test countup(3, 21, [10, 10, 10])  == 13
-    @test countup(19, 21, [])           == 19
-    @test countup(21, 21, [10, 10, 10]) == 21
+@testset "sumlimit" begin
+    @test sumlimit([1, 10, 10, 10], limit=21)  == 21
+    @test sumlimit([3, 10, 10, 10], limit=21)  == 13
+    @test sumlimit([19], limit=21)             == 19
+    @test sumlimit([21, 10, 10, 10], limit=21) == 21
+    @test sumlimit([], limit=21)               == 0
 end
